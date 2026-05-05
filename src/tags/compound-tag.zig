@@ -96,7 +96,7 @@ pub const CompoundTag = struct {
 
         while (true) {
             const next_type_raw = try Int8.read(stream);
-            const next_type: TagType = std.meta.intToEnum(TagType, @as(u8, @bitCast(next_type_raw))) catch return error.InvalidTagType;
+            const next_type: TagType = std.enums.fromInt(TagType, @as(u8, @bitCast(next_type_raw))) orelse return error.InvalidTagType;
 
             if (next_type == .End) {
                 break;
