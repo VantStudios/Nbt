@@ -4,8 +4,9 @@ pub fn build(b: *std.Build) void {
     const target = b.standardTargetOptions(.{});
     const optimize = b.standardOptimizeOption(.{});
 
-    const binarystream_mod = b.addModule("BinaryStream", .{
-        .root_source_file = b.path("libs/BinaryStream/src/root.zig"),
+    const binarystream_dep = b.dependency("BinaryStream", .{
+	.target = target,
+        .optimize = optimize,
     });
 
     const mod = b.addModule("nbt", .{
@@ -13,7 +14,8 @@ pub fn build(b: *std.Build) void {
         .target = target,
         .optimize = optimize,
     });
-    mod.addImport("BinaryStream", binarystream_mod);
+
+    mod.addImport("BinaryStream", binarystream_dep.module("BinaryStream"));
 
     const mod_tests = b.addTest(.{
         .root_module = mod,
